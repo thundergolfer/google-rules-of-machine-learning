@@ -85,7 +85,7 @@ training environment gives the same score as the model in your serving environme
 
 #### Rule 6 - Be careful about dropped data when copying pipelines.
 
-Often we create a pipeline by copying an existing pipeline (i.e. cargo cult programming), and the old pipeline drops data that we need for the new pipeline. For example, the pipeline for Google
+Often we create a pipeline by copying an existing pipeline (i.e. [cargo cult programming](https://en.wikipedia.org/wiki/Cargo_cult_programming)), and the old pipeline drops data that we need for the new pipeline. For example, the pipeline for Google
 Plus What’s Hot drops older posts (because it is trying to rank fresh posts). This pipeline was copied to use for Google Plus Stream, where older posts are still meaningful, but the pipeline
 was still dropping old posts. Another common pattern is to only log data that was seen by the user. Thus, this data is useless if we want to model why a particular post was not seen by the
 user, because all the negative examples have been dropped. A similar issue occurred in Play. While working on Play Apps Home, a new pipeline was created that also contained examples
@@ -119,7 +119,7 @@ freshness can change over time, especially when feature columns are added or rem
 #### Rule 9 - Detect problems before exporting models.
 
 Many machine learning systems have a stage where you export the model to serving. If there is an issue with an exported model, it is a user­facing issue. If there is an issue before, then it is a training issue, and users will not notice.
-Do sanity checks right before you export the model. Specifically, make sure that the model’s performance is reasonable on held out data. Or, if you have lingering concerns with the data, don’t export a model. Many teams continuously deploying models check the area under the ROC curve (or AUC) before exporting. Issues about models that haven’t been exported
+Do sanity checks right before you export the model. Specifically, make sure that the model’s performance is reasonable on held out data. Or, if you have lingering concerns with the data, don’t export a model. Many teams continuously deploying models check the area under the [ROC curve](https://en.wikipedia.org/wiki/Receiver_operating_characteristic) (or [AUC](http://stats.stackexchange.com/questions/132777/what-does-auc-stand-for-and-what-is-it)) before exporting. Issues about models that haven’t been exported
 require an e­mail alert, but issues on a user­facing model may require a page. So better to wait and be sure before impacting users.
 
 #### Rule 10 - Watch for silent failures.
@@ -127,7 +127,9 @@ require an e­mail alert, but issues on a user­facing model may require a page.
 This is a problem that occurs more for machine learning systems than for other kinds of systems. Suppose that a particular table that is being joined is no longer being updated. The
 machine learning system will adjust, and behavior will continue to be reasonably good, decaying gradually. Sometimes tables are found that were months out of date, and a simple refresh
 improved performance more than any other launch that quarter! For example, the coverage of a feature may change due to implementation changes: for example a feature column could be
-populated in 90% of the examples, and suddenly drop to 60% of the examples. Play once had a table that was stale for 6 months, and refreshing the table alone gave a boost of 2% in install rate. If you track statistics of the data, as well as manually inspect the data on occasion, you can reduce these kinds of failures.
+populated in 90% of the examples, and suddenly drop to 60% of the examples. Play once had a table that was stale for 6 months, and refreshing the table alone gave a boost of 2% in install rate. If you track statistics of the data, as well as manually inspect the data on occasion, you can reduce these kinds of failures.*
+
+* <sup> [*A Framework for Analysis of Data Freshness* - Bouzeghoub & Peralta](https://www.fing.edu.uy/inco/grupos/csi/esp/Publicaciones/2004/iqis2004-mb.pdf)</sup>
 
 #### Rule 11 - Give feature columns owners and documentation.
 
@@ -139,14 +141,14 @@ If the system is large, and there are many feature columns, know who created or 
 
 #### Rule 12 - Don't overthink which objective you choose to directly optimize.
 
-You want to make money, make your users happy, and make the world a better place. There are tons of metrics that you care about, and you should measure them all (see Rule #2). However,
+You want to make money, make your users happy, and make the world a better place. There are tons of metrics that you care about, and you should measure them all (see Rule **#2**). However,
 early in the machine learning process, you will notice them all going up, even those that you do not directly optimize. For instance, suppose you care about number of clicks, time spent on the site, and daily active users. If you optimize for number of clicks, you are likely to see the time
 spent increase. So, keep it simple and don’t think too hard about balancing different metrics when you can still
 easily increase all the metrics. Don’t take this rule too far though: do not confuse your objective with the ultimate health of the system (see Rule #39). And, **if you find yourself increasing the directly optimized metric, but deciding not to launch, some objective revision may be required.**
 
 #### Rule 13 - Choose a simple, observable and attributable metric for your first objective.
 
-Often you don't know what the true objective is. You think you do but then you as you stare at the data and side­-by-­side analysis of your old system and new ML system, you realize you want to tweak it. Further, different team members often can't agree on the true objective. The ML objective should be something that is easy to measure and is a proxy for the “true”
+Often you don't know what the true objective is. You think you do but then you as you stare at the data and side­-by-side analysis of your old system and new ML system, you realize you want to tweak it. Further, different team members often can't agree on the true objective. The ML objective should be something that is easy to measure and is a proxy for the “true”
 objective . So train on the simple ML objective, and consider having a "policy layer" on top that allows you to add additional logic (hopefully very simple logic) to do the final ranking.
 
 The easiest thing to model is a user behavior that is directly observed and attributable to an
@@ -159,6 +161,7 @@ action of the system:
 5. Was this shown object marked as spam/pornography/offensive?
 
 Avoid modeling indirect effects at first:
+
 1. Did the user visit the next day?
 2. How long did the user visit the site?
 3. What were the daily active users?
@@ -166,6 +169,7 @@ Indirect effects make great metrics, and can be used during A/B testing and duri
 decisions.
 
 Finally, don’t try to get the machine learning to figure out:
+
 1. Is the user happy using the product?
 2. Is the user satisfied with the experience?
 3. Is the product improving the user’s overall well­being?
@@ -175,15 +179,14 @@ These are all important, but also incredibly hard. Instead, use proxies: if the 
 
 #### Rule 14 - Starting with an interpretable model makes debugging easier.
 
-Linear regression, logistic regression, and Poisson regression are directly motivated by a probabilistic model. Each prediction is interpretable as a probability or an expected value. This makes them easier to debug than models that use objectives (zero­one loss, various hinge losses, et cetera) that try to directly optimize classification accuracy or ranking performance. For example, if probabilities in training deviate from probabilities predicted in side­by­sides or by
+[Linear regression](https://en.wikipedia.org/wiki/Linear_regression), [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression), and [Poisson regression](https://en.wikipedia.org/wiki/Poisson_regression) are directly motivated by a probabilistic model. Each prediction is interpretable as a probability or an expected value. This makes them easier to debug than models that use objectives (zero­one loss, various hinge losses, et cetera) that try to directly optimize classification accuracy or ranking performance. For example, if probabilities in training deviate from probabilities predicted in side­-by-­sides or by
 inspecting the production system, this deviation could reveal a problem.
 
-For example, in linear, logistic, or Poisson regression, **there are subsets of the data where the average predicted expectation equals the average label (1­moment calibrated, or just calibrated)<sup>3</sup>**. If you have a feature which is either 1 or 0 for each example, then the set of examples where that feature is 1 is calibrated. Also, if you have a feature that is 1 for every
-example, then the set of all examples is calibrated.
+For example, in linear, logistic, or Poisson regression, **there are subsets of the data where the average predicted expectation equals the average label (1­moment calibrated, or just calibrated)<sup>3</sup>**. If you have a feature which is either 1 or 0 for each example, then the set of examples where that feature is 1 is calibrated. Also, if you have a feature that is 1 for every example, then the set of all examples is calibrated.
 
 With simple models, it is easier to deal with feedback loops (see Rule **#36&**). Often, we use these probabilistic predictions to make a decision: e.g. rank posts in decreasing expected value (i.e. probability of click/download/etc.). However, remember when it comes time to choose which model to use, the decision matters more than the likelihood of the data given the model (see Rule **#27**).
 
-#### Rule 15 - Separate Space Filtering and Quality Ranking in a Policy Layer.
+#### Rule 15 - Separate Spam Filtering and Quality Ranking in a Policy Layer.
 
 Quality ranking is a fine art, but spam filtering is a war. The signals that you use to determine high quality posts will become obvious to those who use your system, and they will tweak their posts to have these properties. Thus, your quality ranking should focus on ranking content that is posted in good faith. You should not discount the quality ranking learner for ranking spam highly. **Similarly, “racy” content should be handled separately from Quality Ranking.** Spam filtering is a different story. You have to expect that the features that you need to generate will be constantly changing. Often, there will be obvious rules that you put into the system (if a
 post has more than three spam votes, don’t retrieve it, et cetera). Any learned model will have to be updated daily, if not faster. The reputation of the creator of the content will play a great role.
@@ -220,8 +223,8 @@ deep features, you can get an excellent baseline performance. After this baselin
 
 #### Rule 18 - Explore with features of content that generalize across contexts.
 
-Often a machine learning system is a small part of a much bigger picture. For example, if you imagine a post that might be used in What’s Hot, many people will plus­one, re­share, or
-comment on a post before it is ever shown in What’s Hot. If you provide those statistics to the learner, it can promote new posts that it has no data for in the context it is optimizing. YouTube Watch Next could use number of watches, or co­watches (counts of how many times one video was watched after another was watched) from YouTube search. You can also use explicit user
+Often a machine learning system is a small part of a much bigger picture. For example, if you imagine a post that might be used in What’s Hot, many people will plus­-one, re-­share, or
+comment on a post before it is ever shown in What’s Hot. If you provide those statistics to the learner, it can promote new posts that it has no data for in the context it is optimizing. YouTube Watch Next could use number of watches, or co­-watches (counts of how many times one video was watched after another was watched) from YouTube search. You can also use explicit user
 ratings. Finally, if you have a user action that you are using as a label, seeing that action on the document in a different context can be a great feature. All of these features allow you to bring new content into the context. Note that this is not about personalization: figure out if someone likes the content in this context first, then figure out who likes it more or less.
 
 #### Rule 19 - Use very specific features when you can.
