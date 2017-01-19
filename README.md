@@ -17,6 +17,8 @@ You can find the overview for this guide in [overview.md](/overview.md).
 5. [Related Work](/related_work.md)
 6. [Acknowledgements & Appendix](/acknowledgements_and_appendix.md)
 
+**Note**: *Asterisk* (\*) footnotes are my own. *Numbered* footnotes are Martin's.
+
 ## Before Machine Learning
 
 #### Rule 1 - Don't be afraid to launch a product without machine learning.
