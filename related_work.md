@@ -9,3 +9,7 @@ to thinking about data sets.
 * [*Deep Learning*](http://www.deeplearningbook.org/) by Ian Goodfellow et al for learning nonlinear models
 * Google paper on [technical debt](https://research.google.com/pubs/pub43146.html), which has a lot of general advice.
 * [Tensorflow Documentation](https://www.tensorflow.org/)
+
+------
+
+* [This Week in ML - 14 - Scalling Deep Learning](https://twimlai.com/twiml-talk-14-scaling-deep-learning-systems-challenges-shubho-sengupta/)
