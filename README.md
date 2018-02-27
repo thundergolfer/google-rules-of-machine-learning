@@ -256,7 +256,7 @@ which is present if and only if the word “the” is in the document and the qu
 
 There are fascinating statistical learning theory results concerning the appropriate level of complexity for a model, but this rule is basically all you need to know. I have had conversations in which people were doubtful that anything can be learned from one thousand examples, or that you would ever need more than 1 million examples, because they get stuck in a certain method of learning. The key is to scale your learning to the size of your data:
 
-1. If you are working on a search ranking system, and there are millions of different words in the documents and the query and you have 1000 labeled examples, then you should use a dot product between document and query features, [TF­IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf), and a half-­dozen other highly human-­engineered features. 1000 examples, a dozen features.
+1. If you are working on a search ranking system, and there are millions of different words in the documents and the query and you have 1000 labeled examples, then you should use a dot product between document and query features, [TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf), and a half-­dozen other highly human-­engineered features. 1000 examples, a dozen features.
 2. If you have a million examples, then intersect the document and query feature columns, using regularization and possibly feature selection. This will give you millions of features,
 but with regularization you will have fewer. Ten million examples, maybe a hundred thousand features.
 3. If you have billions or hundreds of billions of examples, you can cross the feature columns with document and query tokens, using feature selection and regularization. You will have a billion examples, and 10 million features.
@@ -374,8 +374,8 @@ When you switch your ranking algorithm radically enough that different results s
 specific to one or a few queries over features that generalize to all queries. This approach can help prevent very popular results from leaking into irrelevant queries. Note
 that this is opposite the more conventional advice of having more regularization on feature columns with more unique values.
 2. Only allow features to have positive weights. Thus, any good feature will be better than a feature that is “unknown”.
-3. Don’t have document­only features. This is an extreme version of #1. For example, even if a given app is a popular download regardless of what the query was, you don’t want to
-show it everywhere<sup>4</sup>. Not having document­only features keeps that simple.
+3. Don’t have document-only features. This is an extreme version of #1. For example, even if a given app is a popular download regardless of what the query was, you don’t want to
+show it everywhere<sup>4</sup>. Not having document-only features keeps that simple.
 
 <sup>4 - The reason you don’t want to show a specific popular app everywhere has to do with the importance of
 making all the desired apps reachable. For instance, if someone searches for “bird watching app”, they
